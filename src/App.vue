@@ -1,91 +1,67 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
-import HelloWorld from "./components/HelloWorld.vue";
+import { useRoute } from "vue-router";
+import { computed, reactive } from "vue";
+import Footer from "@/components/Footer.vue";
+
+const route = useRoute();
+const path = computed(() => route.path);
+const name = computed(() => route.name);
+const state = reactive({ active: false });
+
+const toggleActive = () => {
+  state.active = !state.active;
+};
 </script>
 
 <template>
-  <header>
-    <img
-      alt="Vue logo"
-      class="logo"
-      src="@/assets/logo.svg"
-      width="125"
-      height="125"
-    />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+  <div class="app-wrapper">
+    <header>
+      <nav v-if="path !== '/'">
+        <RouterLink to="/about" @click="toggleActive">About</RouterLink>
+        <RouterLink to="/events" @click="toggleActive">Past Projects</RouterLink>
+        <RouterLink to="/radio" @click="toggleActive">Radio</RouterLink>
+        <RouterLink to="/festival" @click="toggleActive">Festival</RouterLink>
       </nav>
-    </div>
-  </header>
-
-  <RouterView />
+    </header>
+    <Footer />
+    <RouterView />
+  </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+body {
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.app {
+  color: white;
 }
-
-nav {
+.app-wrapper {
+  background-color: black;
   width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+  height: 100vh;
+  position: relative;
 }
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
+header {
+  position: fixed;
   nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    font-size: 4rem;
+    line-height: 5rem;
+    text-stroke: 1px white;
+    -webkit-text-stroke: 1px white;
 
-    padding: 1rem 0;
-    margin-top: 1rem;
+    a {
+      color: transparent;
+    }
+    a.router-link-active {
+      color: white;
+      text-stroke: none;
+      -webkit-text-stroke: none;
+      text-shadow: white 1px 1px;
+    }
   }
 }
 </style>
